@@ -75,14 +75,25 @@
 }
 
 .steps-carousel__media {
+  line-height: 0;
   position: relative;
 }
 
 .steps-carousel__image {
   aspect-ratio: 4 / 3;
   border-radius: var(--media-radius, 0);
+  display: block;
   height: auto;
   object-fit: cover;
+  width: 100%;
+}
+
+/* Dawn の placeholder_svg_tag は intrinsic なサイズを持つため、
+   width:100% だけでは実画像と同じ大きさにならない。高さを明示して揃える */
+.steps-carousel__media .placeholder-svg {
+  aspect-ratio: 4 / 3;
+  background-color: rgba(var(--color-foreground), 0.04);
+  height: 100%;
   width: 100%;
 }
 

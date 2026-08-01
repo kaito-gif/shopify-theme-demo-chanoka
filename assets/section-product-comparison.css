@@ -56,7 +56,10 @@
   border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
 }
 
-.product-comparison__product {
+/* バッジの有無で商品セルの高さが変わるため下揃えにする。
+   セレクタを .product-comparison__table 起点にしないと、上の
+   `th, td { vertical-align: middle }` に詳細度で負ける */
+.product-comparison__table .product-comparison__product {
   font-weight: 400;
   min-width: 15rem;
   vertical-align: bottom;
