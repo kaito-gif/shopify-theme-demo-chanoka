@@ -1,0 +1,136 @@
+.steps-carousel__header {
+  align-items: center;
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+}
+
+.steps-carousel__heading {
+  margin: 0;
+}
+
+.steps-carousel__empty {
+  color: rgba(var(--color-foreground), 0.6);
+}
+
+.steps-carousel__controls {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.8rem;
+}
+
+.steps-carousel__control {
+  align-items: center;
+  background-color: transparent;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.2);
+  border-radius: 50%;
+  color: rgb(var(--color-foreground));
+  cursor: pointer;
+  display: flex;
+  height: 4.4rem;
+  justify-content: center;
+  padding: 0;
+  transition: opacity 0.15s ease;
+  width: 4.4rem;
+}
+
+.steps-carousel__control:disabled {
+  cursor: default;
+  opacity: 0.3;
+}
+
+.steps-carousel__control .icon-caret {
+  height: 0.8rem;
+}
+
+.steps-carousel__control[data-direction='previous'] .icon-caret {
+  transform: rotate(90deg);
+}
+
+.steps-carousel__control[data-direction='next'] .icon-caret {
+  transform: rotate(-90deg);
+}
+
+.steps-carousel__track {
+  display: flex;
+  gap: 1.6rem;
+  list-style: none;
+  margin: 0;
+  overflow-x: auto;
+  padding: 0 0 1.6rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.steps-carousel__track:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+  outline-offset: 0.3rem;
+}
+
+.steps-carousel__item {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  width: 70vw;
+}
+
+.steps-carousel__media {
+  position: relative;
+}
+
+.steps-carousel__image {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--media-radius, 0);
+  height: auto;
+  object-fit: cover;
+  width: 100%;
+}
+
+.steps-carousel__number {
+  align-items: center;
+  background-color: rgb(var(--color-background));
+  border-radius: 50%;
+  bottom: -1.6rem;
+  color: rgb(var(--color-foreground));
+  display: flex;
+  font-size: 1.6rem;
+  height: 4rem;
+  justify-content: center;
+  left: 1.6rem;
+  position: absolute;
+  width: 4rem;
+}
+
+.steps-carousel__content {
+  padding: 2.8rem 0 0;
+}
+
+.steps-carousel__item-heading {
+  margin: 0 0 0.8rem;
+}
+
+.steps-carousel__text > :first-child {
+  margin-top: 0;
+}
+
+.steps-carousel__text > :last-child {
+  margin-bottom: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .steps-carousel__track {
+    gap: 2.4rem;
+  }
+
+  .steps-carousel__item {
+    width: 34rem;
+  }
+}
+
+/* 動きを減らす設定の利用者には smooth スクロールを無効にする。
+   JS 側の scrollBy も CSS のこの指定に従う */
+@media (prefers-reduced-motion: reduce) {
+  .steps-carousel__track {
+    scroll-behavior: auto;
+  }
+}

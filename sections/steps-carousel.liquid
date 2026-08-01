@@ -1,0 +1,207 @@
+{{ 'section-steps-carousel.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'steps-carousel.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="steps-carousel page-width section-{{ section.id }}-padding">
+    <div class="steps-carousel__header{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="steps-carousel__heading inline-richtext {{ section.settings.heading_size }}">
+          {{ section.settings.heading }}
+        </h2>
+      {%- endif -%}
+
+      {%- comment -%}
+        スクロールは指・トラックパッドでも行えるが、マウス利用者向けに送りボタンを出す。
+        JS が読み込まれない場合はボタン自体が無意味になるため、hidden で出しておき
+        カスタム要素側で外す。
+      {%- endcomment -%}
+      <div class="steps-carousel__controls" hidden>
+        <button
+          type="button"
+          class="steps-carousel__control"
+          data-direction="previous"
+          aria-label="前のステップへ"
+        >
+          {{- 'icon-caret.svg' | inline_asset_content -}}
+        </button>
+        <button
+          type="button"
+          class="steps-carousel__control"
+          data-direction="next"
+          aria-label="次のステップへ"
+        >
+          {{- 'icon-caret.svg' | inline_asset_content -}}
+        </button>
+      </div>
+    </div>
+
+    {%- if section.blocks.size == 0 -%}
+      <p class="steps-carousel__empty">ステップのブロックを追加してください。</p>
+    {%- else -%}
+      <steps-carousel class="steps-carousel__wrapper">
+        <ol
+          class="steps-carousel__track"
+          tabindex="0"
+          role="region"
+          aria-label="{{ section.settings.heading | default: '手順' | strip_html | escape }}"
+        >
+          {%- for block in section.blocks -%}
+            <li class="steps-carousel__item" {{ block.shopify_attributes }}>
+              <div class="steps-carousel__media">
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 800
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '300, 500, 800',
+                      sizes: '(min-width: 990px) 30rem, (min-width: 750px) 40vw, 70vw',
+                      class: 'steps-carousel__image',
+                      alt: block.settings.image.alt | escape
+                  }}
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag: 'steps-carousel__image placeholder-svg' }}
+                {%- endif -%}
+
+                {%- if section.settings.show_step_number -%}
+                  <span class="steps-carousel__number" aria-hidden="true">{{ forloop.index }}</span>
+                {%- endif -%}
+              </div>
+
+              <div class="steps-carousel__content">
+                {%- if block.settings.heading != blank -%}
+                  <h3 class="steps-carousel__item-heading h5">
+                    {%- if section.settings.show_step_number -%}
+                      <span class="visually-hidden">ステップ{{ forloop.index }}：</span>
+                    {%- endif -%}
+                    {{ block.settings.heading | escape }}
+                  </h3>
+                {%- endif -%}
+
+                {%- if block.settings.text != blank -%}
+                  <div class="steps-carousel__text rte">{{ block.settings.text }}</div>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endfor -%}
+        </ol>
+      </steps-carousel>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "ステップスライダー",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "おいしい淹れ方",
+      "label": "見出し"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "小" },
+        { "value": "h1", "label": "中" },
+        { "value": "h0", "label": "大" }
+      ],
+      "default": "h1",
+      "label": "見出しサイズ"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_step_number",
+      "default": true,
+      "label": "ステップ番号を表示する"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme-1",
+      "label": "配色"
+    },
+    {
+      "type": "header",
+      "content": "余白"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "上の余白",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "下の余白",
+      "default": 52
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "ステップ",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "画像"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "茶葉を量る",
+          "label": "見出し"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>2人分で約4gが目安です。</p>",
+          "label": "説明"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "ステップスライダー",
+      "blocks": [
+        { "type": "step" },
+        { "type": "step" },
+        { "type": "step" },
+        { "type": "step" }
+      ]
+    }
+  ]
+}
+{% endschema %}

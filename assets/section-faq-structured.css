@@ -1,0 +1,65 @@
+.faq-structured__header {
+  margin-bottom: 3rem;
+}
+
+.faq-structured__heading {
+  margin: 0;
+}
+
+.faq-structured__list {
+  margin: 0 auto;
+  max-width: 72rem;
+}
+
+.faq-structured__item {
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.faq-structured__item:first-child {
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.faq-structured__item > summary {
+  align-items: center;
+  display: flex;
+  gap: 1.2rem;
+  line-height: 1;
+  padding: 1.8rem 0.6rem;
+}
+
+.faq-structured__item > summary .accordion__title {
+  flex: 1 1 auto;
+  margin: 0;
+  word-break: break-word;
+}
+
+.faq-structured__item > summary .icon-caret {
+  flex: 0 0 auto;
+  height: 0.6rem;
+  transition: transform 0.15s ease;
+}
+
+.faq-structured__item[open] > summary .icon-caret {
+  transform: rotate(180deg);
+}
+
+.faq-structured__item > .accordion__content {
+  margin: 0 0.6rem 1.8rem;
+  padding: 0;
+}
+
+/* Dawn の component-accordion.css はカードの中に置かれる前提の余白を持つため、
+   単独セクションとして使う本セクションでは打ち消す */
+.faq-structured__item > .accordion__content > :first-child {
+  margin-top: 0;
+}
+
+.faq-structured__item > .accordion__content > :last-child {
+  margin-bottom: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .faq-structured__item > summary {
+    padding: 2.2rem 0.6rem;
+  }
+}

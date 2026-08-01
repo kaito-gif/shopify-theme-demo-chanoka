@@ -1,0 +1,143 @@
+.product-comparison__header {
+  margin-bottom: 3rem;
+}
+
+.product-comparison__heading {
+  margin: 0;
+}
+
+.product-comparison__empty {
+  color: rgba(var(--color-foreground), 0.6);
+  text-align: center;
+}
+
+/* 横スクロール領域。キーボードでもスクロールできるよう tabindex を付けているため、
+   フォーカスリングが出る前提でスタイルを当てる */
+.product-comparison__scroller {
+  -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.product-comparison__scroller:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+  outline-offset: 0.3rem;
+}
+
+.product-comparison__table {
+  border-collapse: collapse;
+  min-width: 100%;
+  table-layout: fixed;
+}
+
+.product-comparison__table th,
+.product-comparison__table td {
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  padding: 1.4rem 1.2rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* 1列目（項目名）はスクロールしても残す。背景色を敷かないと
+   スクロール時に値が透けて重なる */
+.product-comparison__corner,
+.product-comparison__label {
+  background-color: rgb(var(--color-background));
+  font-weight: 500;
+  left: 0;
+  min-width: 11rem;
+  position: sticky;
+  text-align: left;
+  width: 11rem;
+  z-index: 1;
+}
+
+.product-comparison__corner {
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.product-comparison__product {
+  font-weight: 400;
+  min-width: 15rem;
+  vertical-align: bottom;
+  width: 15rem;
+}
+
+.product-comparison__badge {
+  background-color: rgba(var(--color-foreground), 0.08);
+  border-radius: 0.4rem;
+  display: inline-block;
+  font-size: 1.1rem;
+  letter-spacing: 0.05rem;
+  margin-bottom: 0.8rem;
+  padding: 0.3rem 0.8rem;
+}
+
+.product-comparison__image-link,
+.product-comparison__image-placeholder {
+  display: block;
+  margin: 0 auto 1rem;
+  max-width: 14rem;
+}
+
+.product-comparison__image {
+  height: auto;
+  width: 100%;
+}
+
+.product-comparison__image-placeholder .placeholder-svg {
+  background-color: rgba(var(--color-foreground), 0.04);
+  width: 100%;
+}
+
+.product-comparison__title {
+  display: block;
+  font-size: 1.4rem;
+  line-height: 1.4;
+}
+
+.product-comparison__title a {
+  color: rgb(var(--color-foreground));
+  text-decoration: none;
+}
+
+.product-comparison__title a:hover {
+  text-decoration: underline;
+}
+
+.product-comparison__value {
+  font-size: 1.4rem;
+}
+
+.product-comparison__value--cta {
+  padding-bottom: 2rem;
+  padding-top: 2rem;
+}
+
+.product-comparison__button {
+  min-width: auto;
+  width: 100%;
+}
+
+.product-comparison__table tbody tr:last-child th,
+.product-comparison__table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .product-comparison__corner,
+  .product-comparison__label {
+    min-width: 16rem;
+    width: 16rem;
+  }
+
+  .product-comparison__product {
+    min-width: 20rem;
+    width: auto;
+  }
+
+  .product-comparison__table th,
+  .product-comparison__table td {
+    padding: 1.6rem 1.6rem;
+  }
+}

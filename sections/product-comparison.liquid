@@ -1,0 +1,320 @@
+{{ 'section-product-comparison.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="product-comparison page-width section-{{ section.id }}-padding">
+    {%- if section.settings.heading != blank -%}
+      <div
+        class="product-comparison__header{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+        style="text-align: {{ section.settings.heading_alignment }};"
+      >
+        <h2 class="product-comparison__heading inline-richtext {{ section.settings.heading_size }}">
+          {{ section.settings.heading }}
+        </h2>
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size == 0 -%}
+      <p class="product-comparison__empty">比較する商品ブロックを追加してください。</p>
+    {%- else -%}
+      <div
+        class="product-comparison__scroller{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+        tabindex="0"
+        role="region"
+        aria-label="{{ section.settings.heading | default: '商品比較表' | strip_html | escape }}"
+      >
+        <table class="product-comparison__table">
+          <caption class="visually-hidden">
+            {{ section.settings.heading | default: '商品比較表' | strip_html | escape }}
+          </caption>
+          <thead>
+            <tr>
+              <td class="product-comparison__corner"></td>
+              {%- for block in section.blocks -%}
+                {%- assign product = block.settings.product -%}
+                <th scope="col" class="product-comparison__product" {{ block.shopify_attributes }}>
+                  {%- if block.settings.badge != blank -%}
+                    <span class="product-comparison__badge">{{ block.settings.badge | escape }}</span>
+                  {%- endif -%}
+
+                  {%- if product != blank and product.featured_image != blank -%}
+                    <a href="{{ product.url }}" class="product-comparison__image-link">
+                      {{
+                        product.featured_image
+                        | image_url: width: 400
+                        | image_tag:
+                          loading: 'lazy',
+                          widths: '200, 300, 400',
+                          sizes: '(min-width: 750px) 220px, 150px',
+                          class: 'product-comparison__image',
+                          alt: product.featured_image.alt | escape
+                      }}
+                    </a>
+                  {%- else -%}
+                    <div class="product-comparison__image-placeholder">
+                      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                    </div>
+                  {%- endif -%}
+
+                  <span class="product-comparison__title">
+                    {%- if product != blank -%}
+                      <a href="{{ product.url }}">{{ product.title | escape }}</a>
+                    {%- else -%}
+                      商品を選択してください
+                    {%- endif -%}
+                  </span>
+                </th>
+              {%- endfor -%}
+            </tr>
+          </thead>
+
+          <tbody>
+            {%- if section.settings.show_price -%}
+              <tr>
+                <th scope="row" class="product-comparison__label">価格</th>
+                {%- for block in section.blocks -%}
+                  {%- assign product = block.settings.product -%}
+                  <td class="product-comparison__value">
+                    {%- if product != blank -%}
+                      {{ product.price | money }}
+                    {%- else -%}
+                      &mdash;
+                    {%- endif -%}
+                  </td>
+                {%- endfor -%}
+              </tr>
+            {%- endif -%}
+
+            {%- comment -%}
+              比較行のラベルはセクション設定、値は各商品ブロックが持つ。
+              ラベルが空の行は出力しないので、3項目だけ比較したい場合は4行目を空にする。
+            {%- endcomment -%}
+            {%- for i in (1..4) -%}
+              {%- assign label_key = 'row_' | append: i | append: '_label' -%}
+              {%- assign label = section.settings[label_key] -%}
+              {%- if label == blank -%}
+                {%- continue -%}
+              {%- endif -%}
+              {%- assign value_key = 'value_' | append: i -%}
+              <tr>
+                <th scope="row" class="product-comparison__label">{{ label | escape }}</th>
+                {%- for block in section.blocks -%}
+                  {%- assign value = block.settings[value_key] -%}
+                  <td class="product-comparison__value">
+                    {%- if value != blank -%}
+                      {{ value | escape }}
+                    {%- else -%}
+                      &mdash;
+                    {%- endif -%}
+                  </td>
+                {%- endfor -%}
+              </tr>
+            {%- endfor -%}
+
+            {%- if section.settings.show_button -%}
+              <tr>
+                <th scope="row" class="product-comparison__label visually-hidden">購入</th>
+                {%- for block in section.blocks -%}
+                  {%- assign product = block.settings.product -%}
+                  <td class="product-comparison__value product-comparison__value--cta">
+                    {%- if product != blank -%}
+                      <a
+                        href="{{ product.url }}"
+                        class="button button--secondary product-comparison__button"
+                      >
+                        {{ section.settings.button_label | default: '詳細を見る' | escape }}
+                        <span class="visually-hidden">（{{ product.title | escape }}）</span>
+                      </a>
+                    {%- else -%}
+                      &mdash;
+                    {%- endif -%}
+                  </td>
+                {%- endfor -%}
+              </tr>
+            {%- endif -%}
+          </tbody>
+        </table>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "商品比較表",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 4,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "商品を比べる",
+      "label": "見出し"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "小" },
+        { "value": "h1", "label": "中" },
+        { "value": "h0", "label": "大" }
+      ],
+      "default": "h1",
+      "label": "見出しサイズ"
+    },
+    {
+      "type": "text_alignment",
+      "id": "heading_alignment",
+      "default": "center",
+      "label": "見出しの配置"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme-1",
+      "label": "配色"
+    },
+    {
+      "type": "header",
+      "content": "比較する項目",
+      "info": "ラベルが空の行は表示されません。各商品の値は商品ブロック側で入力します。"
+    },
+    {
+      "type": "text",
+      "id": "row_1_label",
+      "default": "産地",
+      "label": "1行目のラベル"
+    },
+    {
+      "type": "text",
+      "id": "row_2_label",
+      "default": "味わい",
+      "label": "2行目のラベル"
+    },
+    {
+      "type": "text",
+      "id": "row_3_label",
+      "default": "カフェイン",
+      "label": "3行目のラベル"
+    },
+    {
+      "type": "text",
+      "id": "row_4_label",
+      "default": "おすすめの飲み方",
+      "label": "4行目のラベル"
+    },
+    {
+      "type": "header",
+      "content": "表示する要素"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "default": true,
+      "label": "価格を表示する"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button",
+      "default": true,
+      "label": "商品ページへのボタンを表示する"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "default": "詳細を見る",
+      "label": "ボタンのテキスト"
+    },
+    {
+      "type": "header",
+      "content": "余白"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "上の余白",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "下の余白",
+      "default": 52
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "比較する商品",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "商品"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "バッジ",
+          "info": "「人気」「限定」など。空欄なら表示しません。"
+        },
+        {
+          "type": "text",
+          "id": "value_1",
+          "label": "1行目の値"
+        },
+        {
+          "type": "text",
+          "id": "value_2",
+          "label": "2行目の値"
+        },
+        {
+          "type": "text",
+          "id": "value_3",
+          "label": "3行目の値"
+        },
+        {
+          "type": "text",
+          "id": "value_4",
+          "label": "4行目の値"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "商品比較表",
+      "blocks": [
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" }
+      ]
+    }
+  ]
+}
+{% endschema %}
