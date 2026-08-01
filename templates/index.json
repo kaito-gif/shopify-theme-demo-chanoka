@@ -121,7 +121,8 @@
             "value_1": "静岡・牧之原",
             "value_2": "コクと甘み",
             "value_3": "やや多い",
-            "value_4": "冷茶にも"
+            "value_4": "冷茶にも",
+            "product": "sencha-yabukita"
           }
         },
         "product-2": {
@@ -131,7 +132,8 @@
             "value_1": "京都・宇治",
             "value_2": "旨みが濃い",
             "value_3": "多い",
-            "value_4": "低温でゆっくり"
+            "value_4": "低温でゆっくり",
+            "product": "gyokuro"
           }
         },
         "product-3": {
@@ -141,7 +143,8 @@
             "value_1": "静岡・掛川",
             "value_2": "香ばしい",
             "value_3": "少なめ",
-            "value_4": "食後・就寝前"
+            "value_4": "食後・就寝前",
+            "product": "hojicha"
           }
         }
       },
