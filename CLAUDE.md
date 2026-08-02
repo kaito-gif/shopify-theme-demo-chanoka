@@ -172,10 +172,9 @@ python3 scripts/generate-images.py products hojicha
 ## 別セッションから再開するとき
 
 1. このファイルと `~/.claude/plans/staged-squishing-bumblebee.md` の「現在地」を読む
-2. `git log --oneline` で直近の作業を確認する（最新は
-   「Lighthouseで見つかったステップスライダーの不備を修正」）
-3. Step 2（デモストア構築）は実質完了。次は **Lighthouseのシークレット再計測 →
-   リッチリザルトテスト → Step 3（案件獲得用ページの作成・公開）**
+2. `git log --oneline` で直近の作業を確認する
+3. Step 2（デモストア構築）完了。Lighthouse計測・構造化データ検証も完了。
+   次は **Step 3（案件獲得用ページの作成・公開）**
 4. **ユーザーが「少し修正したい点がある」と言ったまま未ヒアリング。**
    Step 3 に入る前に内容を聞くこと
 
