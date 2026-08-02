@@ -55,6 +55,16 @@ PRODUCTS = [
 ]
 
 
+def caffeine_tag(caffeine: str) -> str:
+    """カフェイン量の表記をタグに変換する。
+
+    自動コレクションの条件と絞り込みに使う。日本語のタグはURLに出るとパーセント
+    エンコードされて読めなくなるため、ローマ字に寄せる。seed-collections.py も
+    この関数を読むので、定義を増やすときは両方の挙動を確認すること。
+    """
+    return {"少なめ": "caffeine-low", "やや多い": "caffeine-medium", "多い": "caffeine-high"}[caffeine]
+
+
 def token() -> str:
     if not TOKEN_FILE.is_file():
         sys.exit(f"トークンがありません: {TOKEN_FILE}")
@@ -186,7 +196,9 @@ def main() -> None:
                     "descriptionHtml": body,
                     "productType": "日本茶",
                     "vendor": "chanoka",
-                    "tags": ["demo", "chanoka"],
+                    # productSet はタグを差し替えるため、ここから外すと
+                    # カフェイン控えめの自動コレクションが空になる
+                    "tags": ["demo", "chanoka", caffeine_tag(caffeine)],
                     "status": "ACTIVE",
                     "files": [{"originalSource": resource_url, "contentType": "IMAGE", "alt": title}],
                     "productOptions": [{

@@ -48,7 +48,7 @@
         "description": "",
         "show_description": false,
         "description_style": "body",
-        "collection": "all",
+        "collection": "tea",
         "products_to_show": 8,
         "columns_desktop": 4,
         "color_scheme": "scheme-1",
