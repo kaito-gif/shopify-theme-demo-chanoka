@@ -126,7 +126,15 @@
 
             {%- if section.settings.show_button -%}
               <tr>
-                <th scope="row" class="product-comparison__label visually-hidden">購入</th>
+                {%- comment -%}
+                  th 自体に .visually-hidden を付けてはいけない。Dawn の実装は
+                  position: absolute !important なので、この行だけ1列目セルが
+                  レイアウトから消え、sticky 列に覆われずボタンが左端まで出る。
+                  隠すのはラベルの文字だけにして、セルは列として残す。
+                {%- endcomment -%}
+                <th scope="row" class="product-comparison__label">
+                  <span class="visually-hidden">購入</span>
+                </th>
                 {%- for block in section.blocks -%}
                   {%- assign product = block.settings.product -%}
                   <td class="product-comparison__value product-comparison__value--cta">

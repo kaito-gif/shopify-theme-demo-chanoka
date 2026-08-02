@@ -71,7 +71,7 @@
 .steps-carousel__item {
   flex: 0 0 auto;
   scroll-snap-align: start;
-  width: 70vw;
+  width: 100%;
   /* 見出し内の .visually-hidden（Dawn の position:absolute）の包含ブロックを
      ここに固定する。static のままだと包含ブロックがトラックの外側になり、
      絶対配置の子がスクロールコンテナのクリップを抜けてページ全体に
@@ -145,8 +145,8 @@
 }
 
 /* 項目幅を固定値にすると、版面の幅次第で末尾の1件が右端で切れて見える。
-   PCでは表示可能な件数で版面をちょうど割り、見切れを出さない。
-   モバイルの 70vw は「まだ続く」ことを示す意図的なはみ出しなので残す */
+   表示可能な件数で版面をちょうど割り、どの幅でも見切れを出さない
+   （モバイル1件 / 750px以上2件 / 990px以上3件） */
 @media screen and (min-width: 750px) {
   .steps-carousel__track {
     gap: 2.4rem;

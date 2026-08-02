@@ -39,17 +39,32 @@
 }
 
 /* 1列目（項目名）はスクロールしても残す。背景色を敷かないと
-   スクロール時に値が透けて重なる */
+   スクロール時に値が透けて重なる。
+   ただし th の background はテーブル背景フェーズで描かれるため、隣のセル内に
+   ある位置指定済みの要素には負ける。Dawn の .button は position: relative かつ
+   枠線を ::after（position: absolute / z-index: 1）で描くので、素直に
+   background-color を敷くだけだとCTA行のボタンだけが sticky 列の上に出てしまう。
+   背景を ::before に移して th の重ね合わせ文脈の中で描かせ、その文脈を
+   z-index: 2 に置くことで .button::after（z-index: 1）より確実に上へ出す */
 .product-comparison__corner,
 .product-comparison__label {
-  background-color: rgb(var(--color-background));
+  background-color: transparent;
   font-weight: 500;
   left: 0;
   min-width: 11rem;
   position: sticky;
   text-align: left;
   width: 11rem;
-  z-index: 1;
+  z-index: 2;
+}
+
+.product-comparison__corner::before,
+.product-comparison__label::before {
+  background-color: rgb(var(--color-background));
+  content: '';
+  inset: 0;
+  position: absolute;
+  z-index: -1;
 }
 
 .product-comparison__corner {
@@ -117,8 +132,14 @@
   padding-top: 2rem;
 }
 
-.product-comparison__button {
+/* Dawn の .button は左右 3rem の余白を持つため、モバイルの15rem列では
+   「詳細を見る」が2行に折り返す。列幅に収まるまで詰めて折り返しを止める。
+   セレクタを .product-comparison__table 起点にしないと .button と同詳細度になる */
+.product-comparison__table .product-comparison__button {
   min-width: auto;
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
+  white-space: nowrap;
   width: 100%;
 }
 
