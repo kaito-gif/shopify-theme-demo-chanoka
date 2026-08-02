@@ -53,23 +53,34 @@
       <p class="steps-carousel__empty">ステップのブロックを追加してください。</p>
     {%- else -%}
       <steps-carousel class="steps-carousel__wrapper">
+        {%- comment -%}
+          role="region" を <ol> に付けると list ロールが上書きされ、<li> が
+          「リストの外にある項目」と判定されてスクリーンリーダーが手順の件数を
+          読み上げられなくなる（axeの listitem / aria-allowed-role が失格になる）。
+          スクロール領域として名前を持たせるのは aria-label だけで足り、
+          キーボード操作は tabindex="0" で確保できる。
+        {%- endcomment -%}
         <ol
           class="steps-carousel__track"
           tabindex="0"
-          role="region"
           aria-label="{{ section.settings.heading | default: '手順' | strip_html | escape }}"
         >
           {%- for block in section.blocks -%}
             <li class="steps-carousel__item" {{ block.shopify_attributes }}>
               <div class="steps-carousel__media">
+                {%- comment -%}
+                  sizes は section-steps-carousel.css の項目幅（既定70vw、750px以上で34rem）と
+                  一致させる。ずれると実表示より大きい画像が選ばれる
+                  （Lighthouseの「画像配信」で検出された）
+                {%- endcomment -%}
                 {%- if block.settings.image != blank -%}
                   {{
                     block.settings.image
                     | image_url: width: 800
                     | image_tag:
                       loading: 'lazy',
-                      widths: '300, 500, 800',
-                      sizes: '(min-width: 990px) 30rem, (min-width: 750px) 40vw, 70vw',
+                      widths: '300, 400, 600, 800',
+                      sizes: '(min-width: 750px) 34rem, 70vw',
                       class: 'steps-carousel__image',
                       alt: block.settings.image.alt | escape
                   }}
