@@ -31,8 +31,11 @@ Notionページ「副業ポートフォリオ構築計画（Shopify中心）」�
 
 ### スクリプト（テーマには含まれない）
 
-- `scripts/generate-images.py` — 画像生成。`master` / `products` / `lifestyle` / `hero`
+- `scripts/generate-images.py` — 画像生成。`master` / `products` / `lifestyle` / `steps` / `hero`
 - `scripts/seed-products.py` — Admin API で商品登録
+- `scripts/upload-files.py` — 商品に紐づかない画像（ヒーロー・手順カット等）を
+  「コンテンツ > ファイル」へ登録する。テーマ設定からは
+  `shopify://shop_images/<ファイル名>` で参照する
 - `scripts/output/` — 生成画像。`.gitignore` 済み
 
 ## 認証情報の置き場所
@@ -104,6 +107,17 @@ python3 scripts/generate-images.py products hojicha
   否定を具体的に列挙して繰り返す。ラベル色だけ変える指示にすると中身が破綻し、
   中身を指示すると今度は背景が変わる。3点まとめて固定する必要がある
 - **WebP変換は不要。** Shopify CDN が自動でWebP/AVIFを配信する
+- **`scroll-snap-type: x mandatory` は送りボタンを殺すことがある。**
+  最後の項目の開始位置が最大スクロール量を超える幅構成だと、到達できる
+  スナップ位置が先頭しか無くなる。さらに Chrome は smooth の
+  `scrollBy` / `scrollTo` を現在のスナップ位置へ巻き戻す。
+  最後の項目に `scroll-snap-align: end` を与え、JS 側は送り先を明示する
+  `scrollTo` にすること
+- **画像の連番カットは1点でも色が揃わないと使えない。** 手順カットも商品画像と
+  同じく基準画像からの派生にする。テキストで「同じ器」と書くだけでは揃わない
+- **Chrome DevTools 経由での検証時、対象が画面外だと smooth スクロールが
+  動かない。** カルーセルの動作確認は `scrollIntoView` してから行う。
+  画面外のまま計測して「動かない」と誤診しかけた
 
 ## Shopify CLI のバージョン
 
