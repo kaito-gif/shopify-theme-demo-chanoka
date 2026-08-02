@@ -79,6 +79,9 @@ Shopifyトークンのスコープ: `read/write_products`, `read/write_files`,
 
 ```bash
 # ローカルプレビュー（ストアパスワードが要る。省くと対話プロンプトで止まる）
+# 注意: --theme にライブテーマIDを渡しているため開発テーマは作られず、
+# 編集するたびライブテーマへ直接同期される。「ローカルだけの変更」にはならない。
+# 起動したままにせず、検証が終わったら止めること
 shopify theme dev --store chanoka-demo.myshopify.com --theme 190188192061 \
   --store-password <ストアパスワード>
 
@@ -147,6 +150,19 @@ python3 scripts/generate-images.py products hojicha
   `position: relative` を入れること。狭い画面ほど顕著に出る。
   検出は `document.documentElement.scrollWidth > clientWidth` を見て、
   子要素を1つずつ `display:none` にして切り分けるのが速い
+- **Lighthouseは `http://127.0.0.1:9292`（theme dev）で測ってはいけない。**
+  devサーバーは未圧縮配信・キャッシュヘッダ無し・プロキシ遅延のため
+  Performance 77 / Best Practices 77 まで落ち、`server-response 750ms`・
+  `unminified CSS/JS`・`is-on-https` 失格はいずれもdev環境固有の失格になる。
+  実ストア（`https://chanoka-demo.myshopify.com/`）を測ること。
+  ストアはパスワード保護されているので、**シークレットウィンドウで先にストア
+  パスワードを通してから**計測する（でないとパスワード画面を測る）。
+  シークレットでも「シークレットモードでの実行を許可」が有効な拡張機能は動くため、
+  `chrome://extensions/?id=<ID>` で個別にオフにする
+- **セクションのCSSは `stylesheet_tag` により `<link>` がbody内に出力される。**
+  ブラウザ上でCSSを差し替えて検証するとき、`<head>` に `<style>` を差すと
+  後勝ちで負けて**何も変わらない**。body末尾に差すこと。効いたかどうかは
+  `getComputedStyle` の実値で毎回確かめる
 - **ストアフロントは `X-Frame-Options: DENY` かつ `frame-ancestors 'none'`。**
   iframe に読み込んで実機幅を測ることはできない。ポップアップもブロックされる。
   macOSのChromeはウィンドウ幅500px未満にできないため、**390px等の実機幅は
