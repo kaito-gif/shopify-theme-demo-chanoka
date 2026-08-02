@@ -13,6 +13,18 @@
   "sections": {
     "footer": {
       "type": "footer",
+      "blocks": {
+        "shop_links": {
+          "type": "link_list",
+          "settings": {
+            "heading": "メニュー",
+            "menu": "footer"
+          }
+        }
+      },
+      "block_order": [
+        "shop_links"
+      ],
       "settings": {
         "color_scheme": "scheme-1",
         "newsletter_enable": true,
