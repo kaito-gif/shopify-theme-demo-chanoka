@@ -186,7 +186,8 @@ python3 scripts/generate-images.py products hojicha
 1. このファイルと `~/.claude/plans/staged-squishing-bumblebee.md` の「現在地」を読む
 2. `git log --oneline` で直近の作業を確認する
 3. Step 2（デモストア構築）完了。Lighthouse計測・構造化データ検証も完了。
-   次は **Step 3（案件獲得用ページの作成・公開）**
+   Step 3 も本文作成・GitHub公開・Notion掲載まで終わっており、
+   **残りは Notion ページの Web 公開のみ**（詳細は `docs/context.md` の「進捗」）
 4. **ユーザーが「少し修正したい点がある」と言ったまま未ヒアリング。**
    Step 3 に入る前に内容を聞くこと
 
