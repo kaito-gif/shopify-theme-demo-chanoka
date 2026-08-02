@@ -194,6 +194,10 @@ python3 scripts/generate-images.py products hojicha
   ブラウザ上でCSSを差し替えて検証するとき、`<head>` に `<style>` を差すと
   後勝ちで負けて**何も変わらない**。body末尾に差すこと。効いたかどうかは
   `getComputedStyle` の実値で毎回確かめる
+- **Notion の画像ブロックは差し替えられない。** 本文を取得すると画像は
+ 署名付きURL付きの `![](...)` で返るが、この署名は取得のたびに変わる。
+ `update_content` の `old_str` は完全一致なので、取得直後に投げても当たらない。
+ 新しい画像を隣に差し込んで、古い方は手で消してもらうのが現実的
 - **ストアフロントは `X-Frame-Options: DENY` かつ `frame-ancestors 'none'`。**
   iframe に読み込んで実機幅を測ることはできない。ポップアップもブロックされる。
   macOSのChromeはウィンドウ幅500px未満にできないため、**390px等の実機幅は
