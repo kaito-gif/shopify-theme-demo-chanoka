@@ -132,11 +132,16 @@ FAQPage 自体は schema.org の有効な型のままで、Googleはページ理
 
 Step 2（デモストア構築）完了。構造化データ検証も完了。
 
-Step 3 は大部分が完了している。公開ページ本文は `docs/portfolio-page.md` にあり、
-同じ内容を Notion ページ「Shopify テーマ構築・カスタマイズ」へ掲載済み。
-ソースコードは `github.com/kaito-gif/shopify-theme-demo-chanoka` で一般公開し、
-CIも通っている。**残りは Notion ページの Web 公開のみ。**
+**Step 3 完了（2026-08-02）。** 公開ページ本文は `docs/portfolio-page.md` にあり、
+同じ内容を Notion で Web 公開している。ソースコードは
+`github.com/kaito-gif/shopify-theme-demo-chanoka` で一般公開し、CIも通っている。
 
-公開時の注意: ページ本文にストアパスワードを平文で載せている。開発ストアは
-パスワード保護を外せず、閲覧してもらうには載せるしかないための判断。
-Web公開すると誰でも読める状態になる。
+公開URL:
+`https://impartial-astronaut-89c.notion.site/Shopify-3b032860c0bd81369c52f1fc7e587f78`
+
+未ログインのブラウザで本文と画像3点が表示されることを確認済み。**本文を直すときは
+`docs/portfolio-page.md` と Notion の両方を更新する。** 片方だけ直すと食い違う。
+
+ページ本文にはストアパスワードを平文で載せている。開発ストアはパスワード保護を
+外せず、閲覧してもらうには載せるしかないための判断。Web公開しているので
+誰でも読める状態にある。
