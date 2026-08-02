@@ -32,6 +32,8 @@ Notionページ「副業ポートフォリオ構築計画（Shopify中心）」�
 | メタディスクリプション | 同上 | 産地・6商品・淹れ方に触れ、末尾でデモかつ架空ブランドである旨を明記 |
 | ソーシャル共有画像 | 同上 | **未設定。テーマ設定の既定画像で補っている**（下記） |
 | メニュー名称 | コンテンツ > メニュー | ホーム / 茶葉一覧 / お問い合わせ |
+| コレクション | 商品管理 > コレクション | `tea`（手動・6商品）と `low-caffeine`（タグ条件の自動）。`scripts/seed-collections.py` が作る |
+| 絞り込みの名称 | Search & Discovery アプリ | 未導入。既定の絞り込みが `Availability` / `Price` と英語で出る |
 | ストアパスワード | オンラインストア > 各種設定 | 画面に平文で表示される。閲覧用に人へ渡すときはここから確認する |
 
 **管理画面のソーシャル共有画像は設定できない。** 「画像を追加」がネイティブの
@@ -56,6 +58,9 @@ Notionページ「副業ポートフォリオ構築計画（Shopify中心）」�
 
 - `scripts/generate-images.py` — 画像生成。`master` / `products` / `lifestyle` / `steps` / `hero`
 - `scripts/seed-products.py` — Admin API で商品登録
+- `scripts/seed-collections.py` — カフェイン量のタグ付け、コレクション作成（手動の
+ `tea` と タグ条件の自動 `low-caffeine`）、オンラインストアへの公開、
+ 自動生成された `frontpage` の削除。何度流しても同じ結果になる
 - `scripts/upload-files.py` — 商品に紐づかない画像（ヒーロー・手順カット等）を
   「コンテンツ > ファイル」へ登録する。テーマ設定からは
   `shopify://shop_images/<ファイル名>` で参照する
@@ -128,6 +133,13 @@ python3 scripts/generate-images.py products hojicha
   `publishablePublish` で Online Store publication に明示的に公開する。
   踏まないと管理画面では有効なのにストアフロントで解決されない
 - **テーマ設定の商品参照は GID ではなく handle 文字列。** GIDを入れても無言で空になる
+- **既定言語を日本語にしても、テンプレートのJSONへ直接保存されている文言は
+ 英語のまま残る。** `locales/ja.json` は効かない。フッターの登録欄・共有ボタン・
+ 関連商品・コレクション一覧の見出しが該当した。`templates/*.json` と
+ `sections/*-group.json` を英語文字列で検索して洗い出すこと
+- **`collectionCreate` の `ruleSet` は非推奨。** `collection: CollectionCreateInput`
+ の `sources` を使う。タグ条件は `productTag` の `TAGGED_WITH`。
+ 作成直後は未公開なので `publishablePublish` が要る（商品と同じ）
 - **Shopifyが自動生成する handle は日本語になる。** URLがパーセントエンコードされるため
   `productUpdate` でローマ字に振り直す
 - **画像生成の「文字を入れるな」は一度書くだけでは効かない。**
