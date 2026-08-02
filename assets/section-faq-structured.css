@@ -9,6 +9,9 @@
 .faq-structured__list {
   margin: 0 auto;
   max-width: 72rem;
+  /* auto への高さ補間を許可する。継承するプロパティなので、
+     ここに置けば効果はこのセクション内に閉じる */
+  interpolate-size: allow-keywords;
 }
 
 .faq-structured__item {
@@ -36,7 +39,7 @@
 .faq-structured__item > summary .icon-caret {
   flex: 0 0 auto;
   height: 0.6rem;
-  transition: transform 0.15s ease;
+  transition: transform 0.25s ease;
 }
 
 .faq-structured__item[open] > summary .icon-caret {
@@ -58,8 +61,45 @@
   margin-bottom: 0;
 }
 
+/* 開閉のアニメーション。<details> の中身は閉じている間 content-visibility で
+   描画対象から外れるため、素の高さ transition は効かない。::details-content に
+   allow-discrete を併用して、非表示への切り替えをアニメーション終了まで遅らせる。
+   未対応ブラウザ（現状 Firefox）では @supports が丸ごと外れ、
+   これまでどおり瞬時に開閉するだけで、表示自体は壊れない */
+@supports selector(::details-content) {
+  .faq-structured__item::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size 0.25s ease,
+      content-visibility 0.25s allow-discrete;
+  }
+
+  .faq-structured__item[open]::details-content {
+    block-size: auto;
+  }
+
+  /* 開く側は @starting-style が無いとアニメーションしない。閉じている間は
+     content-visibility: hidden で描画対象から外れており、遷移の開始スタイルが
+     存在しないため。閉じる側は開始スタイルがあるので指定なしでも動く。
+     実測: これが無いと開いた瞬間に最終高さへ飛ぶ */
+  @starting-style {
+    .faq-structured__item[open]::details-content {
+      block-size: 0;
+    }
+  }
+}
+
 @media screen and (min-width: 750px) {
   .faq-structured__item > summary {
     padding: 2.2rem 0.6rem;
+  }
+}
+
+/* 動きを減らす設定の利用者にはアニメーションを与えない */
+@media (prefers-reduced-motion: reduce) {
+  .faq-structured__item > summary .icon-caret,
+  .faq-structured__item::details-content {
+    transition: none;
   }
 }

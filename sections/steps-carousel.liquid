@@ -69,9 +69,10 @@
             <li class="steps-carousel__item" {{ block.shopify_attributes }}>
               <div class="steps-carousel__media">
                 {%- comment -%}
-                  sizes は section-steps-carousel.css の項目幅（既定70vw、750px以上で34rem）と
-                  一致させる。ずれると実表示より大きい画像が選ばれる
-                  （Lighthouseの「画像配信」で検出された）
+                  sizes は section-steps-carousel.css の項目幅（既定70vw、750px以上で2件表示、
+                  990px以上で3件表示）と一致させる。ずれると実表示より大きい画像が選ばれる
+                  （Lighthouseの「画像配信」で検出された）。
+                  版面は最大1200px・左右5remパディングなので、広い幅での1件は約35rem
                 {%- endcomment -%}
                 {%- if block.settings.image != blank -%}
                   {{
@@ -80,7 +81,7 @@
                     | image_tag:
                       loading: 'lazy',
                       widths: '300, 400, 600, 800',
-                      sizes: '(min-width: 750px) 34rem, 70vw',
+                      sizes: '(min-width: 1240px) 35rem, (min-width: 990px) 31vw, (min-width: 750px) 45vw, 70vw',
                       class: 'steps-carousel__image',
                       alt: block.settings.image.alt | escape
                   }}

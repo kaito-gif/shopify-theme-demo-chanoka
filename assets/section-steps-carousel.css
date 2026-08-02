@@ -110,11 +110,14 @@
   width: 100%;
 }
 
+/* 画像の内側に収める。画像の下端にまたがらせると、はみ出した下半分が
+   背景（白）と同色になって円が欠けて見える。写真の上に全体を置けば
+   輪郭が最後まで出る */
 .steps-carousel__number {
   align-items: center;
   background-color: rgb(var(--color-background));
   border-radius: 50%;
-  bottom: -1.6rem;
+  bottom: 1.6rem;
   color: rgb(var(--color-foreground));
   display: flex;
   font-size: 1.6rem;
@@ -126,7 +129,7 @@
 }
 
 .steps-carousel__content {
-  padding: 2.8rem 0 0;
+  padding: 1.6rem 0 0;
 }
 
 .steps-carousel__item-heading {
@@ -141,13 +144,22 @@
   margin-bottom: 0;
 }
 
+/* 項目幅を固定値にすると、版面の幅次第で末尾の1件が右端で切れて見える。
+   PCでは表示可能な件数で版面をちょうど割り、見切れを出さない。
+   モバイルの 70vw は「まだ続く」ことを示す意図的なはみ出しなので残す */
 @media screen and (min-width: 750px) {
   .steps-carousel__track {
     gap: 2.4rem;
   }
 
   .steps-carousel__item {
-    width: 34rem;
+    width: calc((100% - 2.4rem) / 2);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .steps-carousel__item {
+    width: calc((100% - 4.8rem) / 3);
   }
 }
 
