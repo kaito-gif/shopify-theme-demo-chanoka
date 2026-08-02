@@ -72,6 +72,11 @@
   flex: 0 0 auto;
   scroll-snap-align: start;
   width: 70vw;
+  /* 見出し内の .visually-hidden（Dawn の position:absolute）の包含ブロックを
+     ここに固定する。static のままだと包含ブロックがトラックの外側になり、
+     絶対配置の子がスクロールコンテナのクリップを抜けてページ全体に
+     横スクロールを発生させる。狭い画面ほど顕著に出る */
+  position: relative;
 }
 
 /* 最後の1件だけ終端スナップにする。start のままだと、最後の項目の開始位置が
