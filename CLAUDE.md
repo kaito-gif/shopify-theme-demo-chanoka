@@ -189,8 +189,8 @@ python3 scripts/generate-images.py products hojicha
    **Step 3（案件獲得用ページの作成・公開）も完了。** 公開URLは
    `docs/context.md` の「進捗」にある。本文を直すときは
    `docs/portfolio-page.md` と Notion の両方を更新すること
-4. **ユーザーが「少し修正したい点がある」と言ったまま未ヒアリング。**
-   Step 3 に入る前に内容を聞くこと
+4. 未着手で残っているのは `docs/context.md` の「未決の事項」2件のみ。
+   どちらも判断待ちなので、こちらから進めずに確認すること
 
 ブラウザ検証を伴う作業をするなら `claude --chrome` で起動する。
 ストアフロントはパスワード保護されているため、**AIからパスワードは入力しない**。
