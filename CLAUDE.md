@@ -118,6 +118,16 @@ python3 scripts/generate-images.py products hojicha
 - **Chrome DevTools 経由での検証時、対象が画面外だと smooth スクロールが
   動かない。** カルーセルの動作確認は `scrollIntoView` してから行う。
   画面外のまま計測して「動かない」と誤診しかけた
+- **横スクロールコンテナの中の `position: absolute` は、包含ブロックが
+  コンテナの外にあるとクリップを抜けてページ全体に横スクロールを起こす。**
+  Dawn の `.visually-hidden` を横スクロール内で使うときは、項目側に
+  `position: relative` を入れること。狭い画面ほど顕著に出る。
+  検出は `document.documentElement.scrollWidth > clientWidth` を見て、
+  子要素を1つずつ `display:none` にして切り分けるのが速い
+- **ストアフロントは `X-Frame-Options: DENY` かつ `frame-ancestors 'none'`。**
+  iframe に読み込んで実機幅を測ることはできない。ポップアップもブロックされる。
+  macOSのChromeはウィンドウ幅500px未満にできないため、**390px等の実機幅は
+  この環境では再現できない**。狭い幅の確認はDevToolsのデバイスモードか実機で行う
 
 ## Shopify CLI のバージョン
 
