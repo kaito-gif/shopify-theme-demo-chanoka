@@ -33,7 +33,7 @@ Notionページ「副業ポートフォリオ構築計画（Shopify中心）」�
 | ソーシャル共有画像 | 同上 | **未設定。テーマ設定の既定画像で補っている**（下記） |
 | メニュー名称 | コンテンツ > メニュー | ホーム / 茶葉一覧 / お問い合わせ |
 | コレクション | 商品管理 > コレクション | `tea`（手動・6商品）と `low-caffeine`（タグ条件の自動）。`scripts/seed-collections.py` が作る |
-| 絞り込みの名称 | Search & Discovery アプリ | 未導入。既定の絞り込みが `Availability` / `Price` と英語で出る |
+| 絞り込みの名称 | Search & Discovery アプリ | 「在庫状況」「価格」。既定だと英語で出るため、アプリを入れて改名した。テーマ側では変えられない |
 | ストアパスワード | オンラインストア > 各種設定 | 画面に平文で表示される。閲覧用に人へ渡すときはここから確認する |
 
 **管理画面のソーシャル共有画像は設定できない。** 「画像を追加」がネイティブの
@@ -56,15 +56,27 @@ Notionページ「副業ポートフォリオ構築計画（Shopify中心）」�
 
 ### スクリプト（テーマには含まれない）
 
-- `scripts/generate-images.py` — 画像生成。`master` / `products` / `lifestyle` / `steps` / `hero`
-- `scripts/seed-products.py` — Admin API で商品登録
+- `scripts/generate-images.py` — 画像生成。`master` / `products` / `lifestyle` / `steps` / `hero`。
+  パッケージのラベルは**無地で出す**（文字はAIが崩すため）
+- `scripts/brand-packages.py` — 無地のラベルに「茶の香 / chanoka / 品名」を刷る。
+  Pillow を使う唯一のスクリプトなので `scripts/requirements.txt` と `.venv` が要る
+- `scripts/seed-products.py` — Admin API で商品登録。画像は `branded/` があればそちらを使う
+- `scripts/update-product-images.py` — 登録済み商品のメイン画像だけを差し替える。
+  `seed-products.py` を流し直すと `productSet` が id 無しで走って商品が二重になる
 - `scripts/seed-collections.py` — カフェイン量のタグ付け、コレクション作成（手動の
  `tea` と タグ条件の自動 `low-caffeine`）、オンラインストアへの公開、
  自動生成された `frontpage` の削除。何度流しても同じ結果になる
 - `scripts/upload-files.py` — 商品に紐づかない画像（ヒーロー・手順カット等）を
   「コンテンツ > ファイル」へ登録する。テーマ設定からは
   `shopify://shop_images/<ファイル名>` で参照する
-- `scripts/output/` — 生成画像。`.gitignore` 済み
+- `scripts/output/` — 生成画像。`.gitignore` 済み。
+  `scripts/output/branded/` がブランド名を刷った版で、ストアに上がっているのはこちら
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install -r scripts/requirements.txt
+.venv/bin/python scripts/brand-packages.py           # 6点に刷る
+.venv/bin/python scripts/brand-packages.py --guide   # ラベル枠の当たりを確認する
+```
 
 ## 認証情報の置き場所
 
@@ -152,6 +164,12 @@ python3 scripts/generate-images.py products hojicha
   `scrollBy` / `scrollTo` を現在のスナップ位置へ巻き戻す。
   最後の項目に `scroll-snap-align: end` を与え、JS 側は送り先を明示する
   `scrollTo` にすること
+- **パッケージのブランド名は画像生成に描かせず、あとから合成する。**
+ 6点それぞれに字形も位置も違うものが出るうえ、色まで振り出しに戻る。
+ ラベルは無地で出し、`brand-packages.py` が Pillow で刷る。ラベルの矩形は
+ マスターからの派生なので全点ほぼ同一で、固定値（`LABEL`）で足りる。
+ 淡いラベル（玄米茶）だけ地のクラフト紙と色が近く、明度で検出させると外すため
+ 検出はやめた。文字色は明度で墨と生成りを切り替える
 - **画像の連番カットは1点でも色が揃わないと使えない。** 手順カットも商品画像と
   同じく基準画像からの派生にする。テキストで「同じ器」と書くだけでは揃わない
 - **Chrome DevTools 経由での検証時、対象が画面外だと smooth スクロールが

@@ -1,0 +1,6 @@
+# brand-packages.py（パッケージへのブランド名の合成）だけが外部ライブラリを使う。
+# 他のスクリプトは標準ライブラリのみで動くため、導入せずとも画像生成と商品登録はできる。
+#
+#   python3 -m venv .venv
+#   .venv/bin/pip install -r scripts/requirements.txt
+Pillow==11.3.0

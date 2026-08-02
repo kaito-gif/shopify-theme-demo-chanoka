@@ -55,6 +55,16 @@ PRODUCTS = [
 ]
 
 
+def image_path(filename: str) -> Path:
+    """アップロードする画像を選ぶ。
+
+    brand-packages.py がブランド名を刷った版を branded/ に出す。ラベルが無地のままの
+    原本を上げると店頭の見え方が戻ってしまうため、刷った版があれば必ずそちらを使う。
+    """
+    branded = IMAGE_DIR / "branded" / filename
+    return branded if branded.is_file() else IMAGE_DIR / filename
+
+
 def caffeine_tag(caffeine: str) -> str:
     """カフェイン量の表記をタグに変換する。
 
@@ -166,16 +176,16 @@ def main() -> None:
     dry_run = "--dry-run" in sys.argv
 
     for filename, title, price, description, origin, taste, caffeine, brewing in PRODUCTS:
-        image_path = IMAGE_DIR / filename
-        if not image_path.is_file():
-            sys.exit(f"画像がありません: {image_path}")
+        path = image_path(filename)
+        if not path.is_file():
+            sys.exit(f"画像がありません: {path}")
 
         print(f"- {title}")
         if dry_run:
-            print(f"    価格 {price} / 画像 {filename}")
+            print(f"    価格 {price} / 画像 {path.relative_to(REPO_ROOT)}")
             continue
 
-        resource_url = upload_image(image_path)
+        resource_url = upload_image(path)
 
         body = (
             f"<p>{description}</p>"
