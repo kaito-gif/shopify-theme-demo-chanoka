@@ -9,6 +9,7 @@
     python3 scripts/generate-images.py master     # まず1枚。ここで納得いくまで回す
     python3 scripts/generate-images.py products   # マスターから商品バリエーション
     python3 scripts/generate-images.py lifestyle  # 世界観カット
+    python3 scripts/generate-images.py steps      # 淹れ方4ステップ（index.jsonと1対1）
     python3 scripts/generate-images.py hero       # 横長バナー
 
 APIキーは環境変数 OPENAI_API_KEY、無ければ ~/.claude/portfolio/openai-key を読む。
@@ -84,6 +85,31 @@ LIFESTYLE = [
     ("kyusu", "A traditional Japanese kyusu teapot pouring green tea into a small ceramic cup on a light wooden table, steam rising softly. " + STYLE),
     ("tea-field", "A terraced Japanese green tea field in soft morning light, rows of trimmed tea bushes receding into gentle mist. " + STYLE),
     ("table", "A quiet breakfast table setting with a cup of green tea, a small plate of wagashi and a linen cloth, shot from a high angle. " + STYLE),
+]
+
+# ステップスライダーの4カット。index.json の step-1〜4 の見出しと1対1で対応させる。
+# 商品画像と同じ理由で**基準画像からの派生**にする。テキストで「同じ器」と書いても
+# 器の色が揃わず、実際に初回生成で step-3 だけ緑の急須になった。
+# step-1 を基準（STEP_BASE）として generate し、step-2〜4 はそれを入力に derive する。
+STEP_BASE = OUTPUT_DIR / "step-1-measure.png"
+
+STEPS_KEEP = (
+    "Keep the exact same scene as the reference image: the same light wooden table, "
+    "the same plain off-white wall, the same beige speckled ceramic kyusu teapot and "
+    "the same pair of beige speckled ceramic cups. Do not change the color of the "
+    "teapot or the cups. Keep the same camera angle, distance and lighting. "
+)
+STEP_FIRST = (
+    "step-1-measure",
+    "A hand holding a small wooden tea scoop, lifting dry green tea leaves from an "
+    "open unlabeled tin toward a small beige speckled ceramic kyusu teapot, with a "
+    "pair of matching beige cups beside it. A light unfinished wooden table, a plain "
+    "off-white wall behind, soft natural daylight from the upper left. ",
+)
+STEPS = [
+    ("step-2-cool", "Hot water being poured from a dark cast-iron kettle into a shallow ceramic cooling vessel, gentle steam rising. " + STEPS_KEEP),
+    ("step-3-wait", "The teapot with its lid closed, resting on the table beside a small wooden-framed sand timer. Nothing is being touched: a quiet waiting moment. " + STEPS_KEEP),
+    ("step-4-pour", "Tea being poured from the teapot into the two small cups placed side by side, both filled to the same level. " + STEPS_KEEP),
 ]
 
 HERO = [
@@ -194,6 +220,26 @@ def main() -> None:
         for name, prompt in LIFESTYLE:
             print(f"- {name}")
             generate(prompt, "1024x1024", OUTPUT_DIR / f"lifestyle-{name}.png")
+
+    elif target == "steps":
+        only = set(sys.argv[2:])
+        names = [STEP_FIRST[0]] + [name for name, _ in STEPS]
+        if only and not only.issubset(set(names)):
+            sys.exit(f"該当なし。指定できるのは: {', '.join(names)}")
+
+        # 基準カット。これが変わると2〜4も揃わなくなるため、単独でやり直せるようにする
+        if not only or STEP_FIRST[0] in only:
+            print(f"- {STEP_FIRST[0]}（基準）")
+            generate(STEP_FIRST[1] + STYLE, "1024x1024", STEP_BASE)
+
+        targets = [s for s in STEPS if not only or s[0] in only]
+        if targets and not STEP_BASE.is_file():
+            sys.exit(
+                "基準カットがありません。先に `python3 scripts/generate-images.py steps step-1-measure` を実行してください。"
+            )
+        for name, instruction in targets:
+            print(f"- {name}")
+            derive(STEP_BASE, instruction + STYLE, "1024x1024", OUTPUT_DIR / f"{name}.png")
 
     elif target == "hero":
         print(f"横長バナーを{len(HERO)}点生成します")

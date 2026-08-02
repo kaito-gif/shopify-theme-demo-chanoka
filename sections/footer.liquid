@@ -297,6 +297,15 @@
         {%- endif -%}
       </div>
     </div>
+    {%- if section.settings.demo_disclaimer != blank -%}
+      {%- comment -%}
+        ポートフォリオ用デモであることの明示。実在の商品・ブランドと誤認されないよう、
+        全ページの最下部に固定で出す。設定を空にすれば消せるが、公開中は空にしないこと。
+      {%- endcomment -%}
+      <div class="footer__content-bottom-wrapper page-width">
+        <p class="footer__demo-disclaimer caption">{{ section.settings.demo_disclaimer }}</p>
+      </div>
+    {%- endif -%}
     <div class="footer__content-bottom-wrapper page-width{% if section.settings.enable_country_selector == false and section.settings.enable_language_selector == false %} footer__content-bottom-wrapper--center{% endif %}">
       <div class="footer__copyright caption">
         <small class="copyright__content"
@@ -491,6 +500,17 @@
       "default": true,
       "label": "t:sections.footer.settings.show_policy.label",
       "info": "t:sections.footer.settings.show_policy.info"
+    },
+    {
+      "type": "header",
+      "content": "デモストアの注記"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "demo_disclaimer",
+      "label": "注記テキスト",
+      "info": "全ページのフッター最下部に表示されます。ポートフォリオ用デモである旨の明示のため、公開中は空にしないでください。",
+      "default": "このストアはポートフォリオ用のデモです。chanoka は架空のブランドであり、掲載している商品・価格・画像はすべてデモ用です。商品画像はAIで生成しています。"
     },
     {
       "type": "header",

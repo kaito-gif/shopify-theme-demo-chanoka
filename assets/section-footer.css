@@ -301,6 +301,16 @@
   }
 }
 
+/* デモストアであることの注記。読み飛ばされない程度には目に入るよう、
+   コピーライトより上に置いて中央揃え・全幅で出す。 */
+.footer__demo-disclaimer {
+  margin: 0 0 1rem;
+  padding-top: 1.5rem;
+  width: 100%;
+  text-align: center;
+  opacity: 0.85;
+}
+
 @keyframes appear-down {
   0% {
     opacity: 0;

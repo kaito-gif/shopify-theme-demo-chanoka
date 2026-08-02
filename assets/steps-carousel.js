@@ -25,16 +25,24 @@ class StepsCarousel extends HTMLElement {
     const button = event.target.closest('[data-direction]');
     if (!button) return;
 
-    const item = this.querySelector('.steps-carousel__item');
-    if (!item) return;
+    const items = this.querySelectorAll('.steps-carousel__item');
+    if (items.length === 0) return;
 
-    // 1件分の幅（gap 含む）だけ送る。端数が出ると scroll-snap が
-    // 中途半端な位置で止まるため、実測値をそのまま使う
+    // 1件分の幅（gap 含む）。端数が出ると scroll-snap が中途半端な位置で
+    // 止まるため、実測値をそのまま使う
     const gap = parseFloat(getComputedStyle(this.track).columnGap) || 0;
-    const distance = item.getBoundingClientRect().width + gap;
+    const distance = items[0].getBoundingClientRect().width + gap;
 
-    this.track.scrollBy({
-      left: button.dataset.direction === 'next' ? distance : -distance,
+    // scrollBy は使わない。scroll-snap-type が mandatory のとき、Chrome は
+    // 相対スクロールを現在のスナップ位置へ巻き戻すことがあり、末尾からの
+    // 「前へ」がまったく動かない。送り先を明示する scrollTo なら効く
+    const maximum = this.track.scrollWidth - this.track.clientWidth;
+    const current = Math.round(this.track.scrollLeft / distance);
+    const step = button.dataset.direction === 'next' ? 1 : -1;
+    const index = Math.min(Math.max(current + step, 0), items.length - 1);
+
+    this.track.scrollTo({
+      left: Math.min(index * distance, maximum),
       behavior: 'smooth',
     });
   };

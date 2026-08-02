@@ -6,16 +6,16 @@
         "heading": {
           "type": "heading",
           "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
+            "heading": "毎日の一杯を、すこし丁寧に。",
+            "heading_size": "h1"
           }
         },
         "button": {
           "type": "buttons",
           "settings": {
-            "button_label_1": "Shop all",
+            "button_label_1": "茶葉を見る",
             "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
+            "button_style_secondary_1": false,
             "button_label_2": "",
             "button_link_2": "",
             "button_style_secondary_2": false
@@ -27,22 +27,23 @@
         "button"
       ],
       "settings": {
-        "image_overlay_opacity": 40,
+        "image_overlay_opacity": 10,
         "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
+        "desktop_content_position": "middle-left",
+        "show_text_box": true,
         "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
+        "desktop_content_alignment": "left",
+        "color_scheme": "scheme-1",
+        "mobile_content_alignment": "left",
         "stack_images_on_mobile": false,
-        "show_text_below": false
+        "show_text_below": false,
+        "image": "shopify://shop_images/hero-main.png"
       }
     },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
-        "title": "Featured products",
+        "title": "人気の茶葉",
         "heading_size": "h2",
         "description": "",
         "show_description": false,
@@ -74,28 +75,32 @@
           "type": "step",
           "settings": {
             "heading": "茶葉を量る",
-            "text": "<p>2人分で約4gが目安です。ティースプーン山盛り1杯ほど。</p>"
+            "text": "<p>2人分で約4gが目安です。ティースプーン山盛り1杯ほど。</p>",
+            "image": "shopify://shop_images/step-1-measure.png"
           }
         },
         "step-2": {
           "type": "step",
           "settings": {
             "heading": "お湯を冷ます",
-            "text": "<p>湯冷ましに移して70〜80℃まで下げます。渋みが出にくくなります。</p>"
+            "text": "<p>湯冷ましに移して70〜80℃まで下げます。渋みが出にくくなります。</p>",
+            "image": "shopify://shop_images/step-2-cool.png"
           }
         },
         "step-3": {
           "type": "step",
           "settings": {
             "heading": "60秒待つ",
-            "text": "<p>急須に注ぎ、ふたをして1分。時間を計るのがいちばんの近道です。</p>"
+            "text": "<p>急須に注ぎ、ふたをして1分。時間を計るのがいちばんの近道です。</p>",
+            "image": "shopify://shop_images/step-3-wait.png"
           }
         },
         "step-4": {
           "type": "step",
           "settings": {
             "heading": "均等に注ぎ分ける",
-            "text": "<p>濃さが揃うよう、少しずつ回し注ぎ。最後の一滴まで注ぎきります。</p>"
+            "text": "<p>濃さが揃うよう、少しずつ回し注ぎ。最後の一滴まで注ぎきります。</p>",
+            "image": "shopify://shop_images/step-4-pour.png"
           }
         }
       },

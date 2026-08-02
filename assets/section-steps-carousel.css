@@ -74,6 +74,14 @@
   width: 70vw;
 }
 
+/* 最後の1件だけ終端スナップにする。start のままだと、最後の項目の開始位置が
+   最大スクロール量を超える幅のとき（例: 1200pxの版面に34remの項目4件）
+   到達可能なスナップ位置が先頭しか無くなり、mandatory の下では送りボタンを
+   押しても引き戻される。実ブラウザでのみ再現する。 */
+.steps-carousel__item:last-child {
+  scroll-snap-align: end;
+}
+
 .steps-carousel__media {
   line-height: 0;
   position: relative;
