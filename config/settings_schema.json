@@ -1304,6 +1304,12 @@
     "name": "t:settings_schema.social-media.name",
     "settings": [
       {
+        "type": "image_picker",
+        "id": "default_share_image",
+        "label": "SNS共有時の既定画像",
+        "info": "オンラインストアの各種設定で共有画像が指定されていないページで使われます。1200 x 628px 以上を推奨。指定しないと og:image が出力されず、SNSに貼ったときに画像が出ません。"
+      },
+      {
         "type": "text",
         "id": "social_facebook_link",
         "label": "t:settings_schema.social-media.settings.social_facebook_link.label",

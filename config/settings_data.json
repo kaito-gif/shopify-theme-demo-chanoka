@@ -189,7 +189,8 @@
             "color_scheme": "scheme-1"
           }
         }
-      }
+      },
+      "default_share_image": "shopify://shop_images/hero-main.png"
     }
   }
 }

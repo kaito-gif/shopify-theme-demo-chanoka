@@ -17,7 +17,7 @@
         "announcement-bar-0": {
           "type": "announcement",
           "settings": {
-            "text": "Welcome to our store",
+            "text": "2,000円以上のご注文で送料無料",
             "text_alignment": "center",
             "color_scheme": "scheme-1",
             "link": ""
